@@ -23,18 +23,72 @@ ggplot(data = mpg) +
 ```
 
 What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
+advantages:
+Every chart can be observed separatly
+disadvantages:
+Graphs are smaller. Too many graphs, especially if you have large dataset
+
 
 - Recreate the R code necessary to generate the following graphs.
 
 ```{r, out.width=200}
 knitr::include_graphics(paste0("plots/fig", 1:6, ".png"))
+
+```
+```{r graph1, out.width=200}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+```{r graph2, out.width=200}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, class = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+```{r graph3, out.width=200}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+```{r graph4, out.width=200}
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy), se = FALSE)
+```
+
+```{r graph5, out.width=200}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(aes(color = drv)) + 
+  geom_smooth(aes(linetype = drv), se = FALSE)
+```
+
+```{r graph6, out.width=200}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() 
 ```
 
 - Most geoms and stats come in pairs that are almost always used in concert. Read through the documentation and make a list of all the pairs. What do they have in common?
 
 - Compare and contrast geom_jitter() with geom_count().
 
+Both are helpful when data overlaping exists. They help to distinguish many points on the same place. 
+Geom_ponit maps the count to point area
+Geom_jitter adds random values to the points, so that they are not on the same location anymore. 
+
 - What does the plot below tell you about the relationship between city and highway mpg (fuel consumption)? Why is coord_fixed() important? What does geom_abline() do?
+
+The relationship is linear
+coord_fixed() - scales the graph,it is responsible for x and y axes ratio.
+geom_abline() - adds the line below, what is capable of showing the trend. 
 
 ```{r}
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
@@ -44,6 +98,7 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 ```
 
 - What is the default geom associated with stat_summary()?
+It is geom_pointrange
 
 ```{r}
 ggplot(data = diamonds) + 
@@ -56,13 +111,20 @@ ggplot(data = diamonds) +
 ```
 
 How could you rewrite the previous plot to use that geom function instead of the stat function?
- 
- 
+
+
 - What does geom_col() do? How is it different to geom_bar()?
 
+geom_bar() makes the height of the bar proportional to the number of cases in each group.
+geom_col()  - heights of the bars to represent values in the data
+
 - What variables does stat_smooth() compute? What parameters control its behaviour?
+it presents common value. Different smooth functions are available  y ~ x, y ~ poly(x, 2), y ~ log(x)
+
 
 - In our proportion bar chart, we need to set group = 1. Why? In other words what is the problem with these two graphs?
+
+We cannot see the relationship between different classes, so we do not know what part Fair/D makes from all amount
 ```{r}
 ggplot(data = diamonds) + 
   geom_bar(mapping = aes(x = cut, y = ..prop..))
